@@ -10,7 +10,7 @@ import pandas as pd
 DataCsv = pd.read_csv("StudentData.csv")
 X =DataCsv.iloc[:,:-1].values
 y = DataCsv.iloc[:,3].values
-Theta = np.array([0.1,0.5,0.8])
+Theta = np.array([0.0,0.0,0.0])
 
 from sklearn.linear_model import LinearRegression
 ols = LinearRegression()
