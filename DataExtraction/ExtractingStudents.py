@@ -72,6 +72,7 @@ def Check_Target_Course(target_course):
 
     return ID_Prev_Students
 
+#recoding the grade of all the students for all the courses target student took previously.
 def Create_Data_To_Train(Courses,StudentIDs):
     print("Creating Training Data....")
     
@@ -93,6 +94,10 @@ def Create_Data_To_Train(Courses,StudentIDs):
                     courseLists[index].append(-1)
     return courseLists
 
+def Clean_Data_To_Train(recordedCourseData):
+    print("Clean data for total courses: ",len(recordedCourseData))
+    
+    
 
 def main():
     print("Exectuing the code")
@@ -102,9 +107,12 @@ def main():
     Target_Student_Prev_Courses = ['CS525','CS541']
     
     ID_Prev_Students = Check_Target_Course(Target_Course)
-    print("Students Who Previously Took The Target Course: ", len(ID_Prev_Students))
+    print("Num of Students Who Previously Took The Target Course: ", len(ID_Prev_Students))
     
-    Create_Data_To_Train(Target_Student_Prev_Courses, ID_Prev_Students)
+    recordedCourseData = Create_Data_To_Train(Target_Student_Prev_Courses, ID_Prev_Students)
+    
+    Clean_Data_To_Train(recordedCourseData)
+
     
 if __name__ == "__main__":
     main()
