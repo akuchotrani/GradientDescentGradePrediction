@@ -22,6 +22,14 @@ def CSV_to_Array2D(filename):
     result.append(row)
   return result
 
+def Array2D_to_CSV(filename, table):
+  csvfile = open(filename, 'w')
+  for row in table:
+    for cell in row:
+      csvfile.write(str(cell) + ',')
+    csvfile.write('\n')
+  csvfile.close()
+
 
 
 #Return an object by parsing the course string and seperating it with keys: code , season, year
@@ -72,6 +80,17 @@ def Check_Target_Course(target_course):
 
     return ID_Prev_Students
 
+
+def Record_Target_Course_Values(student_IDs,target_course):
+    grades_Target_Course = []
+    for ID in student_IDs:
+        grade = students[ID][target_course]
+        grades_Target_Course.append(grade)
+        print(grade)
+    return grades_Target_Course
+        
+    
+
 #recoding the grade of all the students for all the courses target student took previously.
 def Create_Data_To_Train(Courses,StudentIDs):
     print("Creating Training Data....")
@@ -112,7 +131,26 @@ def Clean_Data_To_Train(recordedCourseData):
             if grade == -1:
                 recordedCourseData[indexList][indexGrade] = mean_course
     return recordedCourseData
-                
+
+
+def Create_Grade_Table(cleanedRecordedData):
+    
+    print("Creating Grade Table")
+    # make a grade table for students(columns) and courses(rows)
+    gradeTable = []
+    
+    #go through all the student records
+    for index in range(0,len(cleanedRecordedData[0])):
+        #create a row for each student
+        gradeTableRow = []
+        #go through all the courses per student
+        for courseIndex in range(0,len(cleanedRecordedData)):
+            gradeTableRow.append(cleanedRecordedData[courseIndex][index])
+        gradeTable.append(gradeTableRow)        
+        
+    return gradeTable
+
+
         
 
 def main():
@@ -125,9 +163,13 @@ def main():
     ID_Prev_Students = Check_Target_Course(Target_Course)
     print("Num of Students Who Previously Took The Target Course: ", len(ID_Prev_Students))
     
+    Record_Target_Course_Values(ID_Prev_Students,Target_Course)
+    
     recordedCourseData = Create_Data_To_Train(Target_Student_Prev_Courses, ID_Prev_Students)
     
     cleanedRecordedData = Clean_Data_To_Train(recordedCourseData)
+    gradeTable = Create_Grade_Table(cleanedRecordedData)
+    Array2D_to_CSV("TrainingData",gradeTable)
     
     
 if __name__ == "__main__":
