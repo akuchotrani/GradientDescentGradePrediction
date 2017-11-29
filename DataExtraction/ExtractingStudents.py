@@ -25,8 +25,12 @@ def CSV_to_Array2D(filename):
 def Array2D_to_CSV(filename, table):
   csvfile = open(filename, 'w')
   for row in table:
+    counter = 1
     for cell in row:
-      csvfile.write(str(cell) + ',')
+      csvfile.write(str(cell))
+      if(counter < len(row)):
+          csvfile.write(',')
+          counter = counter + 1
     csvfile.write('\n')
   csvfile.close()
 
@@ -82,11 +86,12 @@ def Check_Target_Course(target_course):
 
 
 def Record_Target_Course_Values(student_IDs,target_course):
+    print("Recording target course values.....")
     grades_Target_Course = []
     for ID in student_IDs:
         grade = students[ID][target_course]
         grades_Target_Course.append(grade)
-        print(grade)
+        #print(grade)
     return grades_Target_Course
         
     
@@ -124,13 +129,19 @@ def Clean_Data_To_Train(recordedCourseData):
         #calculating the mean of the course and rounding it to 2 decimal places
         mean_course = sum(recordedCourseData[indexList])/len(recordedCourseData[indexList])
         mean_course = round(mean_course,2)
-        print("Mean: ",mean_course)
+        #print("Mean: ",mean_course)
         
         #for all the courses if the data is not available == -1 we will fill in the missing values with mean
         for indexGrade,grade in enumerate(recordedCourseData[indexList]):
             if grade == -1:
                 recordedCourseData[indexList][indexGrade] = mean_course
     return recordedCourseData
+
+
+def Merge_Target_Course_Grade_To_Cleaned_Data(cleanedRecordedData, grades_Target_Course):
+    cleanedRecordedData.append(grades_Target_Course)
+    
+    
 
 
 def Create_Grade_Table(cleanedRecordedData):
@@ -163,13 +174,15 @@ def main():
     ID_Prev_Students = Check_Target_Course(Target_Course)
     print("Num of Students Who Previously Took The Target Course: ", len(ID_Prev_Students))
     
-    Record_Target_Course_Values(ID_Prev_Students,Target_Course)
+    target_course_recorded_grades = Record_Target_Course_Values(ID_Prev_Students,Target_Course)
     
     recordedCourseData = Create_Data_To_Train(Target_Student_Prev_Courses, ID_Prev_Students)
-    
     cleanedRecordedData = Clean_Data_To_Train(recordedCourseData)
+    
+    Merge_Target_Course_Grade_To_Cleaned_Data(cleanedRecordedData,target_course_recorded_grades)
+    
     gradeTable = Create_Grade_Table(cleanedRecordedData)
-    Array2D_to_CSV("TrainingData",gradeTable)
+    Array2D_to_CSV("TrainingData.csv",gradeTable)
     
     
 if __name__ == "__main__":
