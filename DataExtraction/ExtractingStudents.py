@@ -97,7 +97,16 @@ def Create_Data_To_Train(Courses,StudentIDs):
 def Clean_Data_To_Train(recordedCourseData):
     print("Clean data for total courses: ",len(recordedCourseData))
     
+    for indexList in range(0,len(recordedCourseData)):
+        recordedCourseData[indexList] = [float(i) for i in recordedCourseData[indexList]]
+        median_course = np.median(recordedCourseData[indexList])
+        for grade in recordedCourseData[indexList]:
+            if grade == -1:
+                recordedCourseData[indexList] = median_course
     
+    return recordedCourseData
+                
+        
 
 def main():
     print("Exectuing the code")
@@ -111,7 +120,9 @@ def main():
     
     recordedCourseData = Create_Data_To_Train(Target_Student_Prev_Courses, ID_Prev_Students)
     
-    Clean_Data_To_Train(recordedCourseData)
+    cleandedCourseData = Clean_Data_To_Train(recordedCourseData)
+    for grade in cleandedCourseData[0]:
+        print(grade)
 
     
 if __name__ == "__main__":
