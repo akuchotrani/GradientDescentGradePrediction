@@ -82,9 +82,11 @@ def main():
     weights = np.array(Model.coef_)
     normWeights = [float(i)/sum(weights[0]) for i in weights[0]]
     print(normWeights)
+    normWeights =  np.sort(normWeights)
+    print('Sorted norm:',normWeights)
     
+    target_Student_Grades = [88,88,82,87,85,0,84,85,85,75,94]
     
-    target_Student_Grades = [50,100]
     predictedGrade = Predict_Grade(normWeights,target_Student_Grades)
     
     print("PredictedGrade: ",predictedGrade)

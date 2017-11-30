@@ -168,8 +168,11 @@ def main():
     print("Exectuing the code")
     Create_Dictionary_of_Dictionary()
     
-    Target_Course = "CS529"
-    Target_Student_Prev_Courses = ['CS525','CS541']
+    Target_Course = "CS300"
+    Target_Student_Prev_Courses = ['MAT140','CS100','CS120','ENG110','COL101','GAM100',
+                                   'MAT150','CS170','CS230','COM150','GAM150',
+                                   'MAT200','CS180','CS200','CS225','GAM200',
+                                   'MAT250','PHY200','CS250','CS280','GAM250']
     
     ID_Prev_Students = Check_Target_Course(Target_Course)
     print("Num of Students Who Previously Took The Target Course: ", len(ID_Prev_Students))
