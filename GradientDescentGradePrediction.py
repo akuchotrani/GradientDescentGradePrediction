@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 
-
+'''
 def GradentDescent(X,y,Theta,alpha,m,numIterations):
     X_trans = X.transpose()
     #print("X_transpose: ",X_trans)
@@ -21,40 +21,77 @@ def GradentDescent(X,y,Theta,alpha,m,numIterations):
         print("")
         gradient = np.dot(X_trans,loss)
         print("Gradient: ",gradient)
-        Theta = Theta - alpha*gradient
+        #Theta = Theta - alpha*gradient
+        Theta = Theta - gradient.dot(alpha)
     return Theta
+
+
+'''
+
+
+def Read_Dataset(filename):
+    DataCsv = pd.read_csv(filename)
+    X =DataCsv.iloc[:,:-1].values
+    y = DataCsv.iloc[:,-1].values
+    return X,y
+
+
+def Perform_Feature_Scaling(X,y):
+    #Feature Scaling
+    from sklearn.preprocessing import StandardScaler
+    sc_X = StandardScaler()
+    X_train = sc_X.fit_transform(X)
+    sc_y = StandardScaler()
+    y = np.array(y).reshape(-1,1)
+    y_train = sc_y.fit_transform(y)
+    
+    return X_train, y_train
+
+
+def Train_Model_Library_Method(X_train, y_train):
+    from sklearn.linear_model import LinearRegression
+    ols = LinearRegression()
+    regressor = ols.fit(X_train,y_train)
+    return regressor
     
 
 
-numIterations = 5
-alpha = 0.001
-DataCsv = pd.read_csv("C:\\Users\\aakash.chotrani\\Desktop\\GradientDescentGradePrediction\\DataExtraction\\TrainingData.csv")
-X =DataCsv.iloc[:,:-1].values
-y = DataCsv.iloc[:,-1].values
 
-#Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc_X = StandardScaler()
-X_train = sc_X.fit_transform(X)
-sc_y = StandardScaler()
-y = np.array(y).reshape(-1,1)
-y_train = sc_y.fit_transform(y)
+def Predict_Grade(weights,target_Student_Grades):
+    predictedGrade = np.dot(weights,target_Student_Grades)
+    return predictedGrade
 
-Theta = np.array([0.5,0.5])
-m = np.shape(X)
-Theta = GradentDescent(X,y,Theta,alpha,m,numIterations)
 
-student5 = [100,90]
-
-print("Final Weights: ",Theta)
-print("Studnet Grades: ",student5)
-predictedGrade = np.dot(Theta,student5)
-
-print("PredictedGrade: ",predictedGrade)
+def Train_Model_Custom_Method():
+    weights = []
+    return weights
 
 
 
+def main():
+    
+    filename = "C:\\Users\\aakash.chotrani\\Desktop\\GradientDescentGradePrediction\\DataExtraction\\TrainingData.csv"
+    #numIterations = 5
+    #alpha = 0.001
+    X,y = Read_Dataset(filename)
+    X_train, y_train = Perform_Feature_Scaling(X,y)
+    
+    
+    Model = Train_Model_Library_Method(X_train, y_train)
+    
+    weights = np.array(Model.coef_)
+    normWeights = [float(i)/sum(weights[0]) for i in weights[0]]
+    print(normWeights)
+    
+    
+    target_Student_Grades = [50,100]
+    predictedGrade = Predict_Grade(normWeights,target_Student_Grades)
+    
+    print("PredictedGrade: ",predictedGrade)
 
+
+if __name__ == "__main__":
+    main()
 
 
 
