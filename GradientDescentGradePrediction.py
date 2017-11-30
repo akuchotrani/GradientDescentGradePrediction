@@ -79,8 +79,11 @@ def main():
     
     Model = Train_Model_Library_Method(X_train, y_train)
     
+    #Model = Train_Model_Library_Method(X, y)
+    
     weights = np.array(Model.coef_)
-    normWeights = [float(i)/sum(weights[0]) for i in weights[0]]
+    print("Weights: ",weights)
+    normWeights = [float(i)/sum(weights) for i in weights]
     print(normWeights)
     normWeights =  np.sort(normWeights)
     print('Sorted norm:',normWeights)
